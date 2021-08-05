@@ -7,15 +7,17 @@ import creatures.Plip;
  */
 public class HugLife {
 
-    /** Size of the world. Probably best to keep this under 100
-     *  or so.
+    // TODO stop when stuck
+
+    /** Size of the world. Probably best to keep this under 100 
+      *  or so.
      */
-    public static final int WORLD_SIZE = 15;
+    public static final int WORLD_SIZE = 15;// 15;
 
     /** Maximum number of cycles to simulate by default. */
     public static final int MAX_CYCLES = 1000;
 
-    /** Time in milliseconds between simulation steps.
+    /** Time in milliseconds between simulation steps. 
      *  Reduce to make things run faster.
      */
     public static final int PAUSE_TIME_PER_SIMSTEP = 100;
@@ -31,7 +33,7 @@ public class HugLife {
     }
 
     /** Simulates the world for CYCLES cycles, simulation
-     *  one entire cycle between
+     *  one entire cycle between 
      */
     public void simulate(int cycles) {
         int cycleCount = 0;
@@ -78,6 +80,7 @@ public class HugLife {
             addCreature(12, 12, new Plip());
             addCreature(3, 3, new Plip());
             addCreature(4, 3, new Plip());
+
             addCreature(2, 2, new Clorus(1));*/
         } else {
             System.out.println("World name not recognized!");
@@ -135,7 +138,7 @@ public class HugLife {
 
 
     /** By default, the simulator simulates by cycle, i.e.
-     *  allows every creature to move before drawing.
+     *  allows every creature to move before drawing. 
      *  If you set this to false, then the world will be drawn
      *  between moves (much slower).
      */
