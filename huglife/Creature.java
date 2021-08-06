@@ -16,7 +16,7 @@ public abstract class Creature extends Occupant {
     /** Creates a creature with the name N. The intention is that this
       * name should be shared between all creatures of the same type.
       */
-    public Creature(Type type) {
+    protected Creature(Type type) {
         super(type);
     }
 
@@ -51,13 +51,12 @@ public abstract class Creature extends Occupant {
         Direction.LEFT */
     public List<Direction> getNeighborsOfType(Map<Direction, Occupant> n,
                                               Type type) {
-        List<Direction> L = new ArrayList<Direction>();
+        List<Direction> list = new ArrayList<>();
         for (Map.Entry<Direction, Occupant> entry : n.entrySet()) {
-            Type occupantType = entry.getValue().getType();
-            if (occupantType == type) {
-                L.add(entry.getKey());
+            if (entry.getValue().getType() == type) {
+                list.add(entry.getKey());
             }
         }
-        return L;
+        return list;
     }
 }
