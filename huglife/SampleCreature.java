@@ -131,9 +131,9 @@ public class SampleCreature extends Creature {
 
 //        return chooseSimpleCreature(neighbors);
 
-//        return chooseReplicateOnWall(neighbors);
+        return chooseReplicateOnWall(neighbors);
 
-        return chooseMoveAwayFromWall(neighbors);
+//        return chooseMoveAwayFromWall(neighbors);
     }
 
     private Action chooseSimpleCreature(Map<Direction, Occupant> neighbors) {
