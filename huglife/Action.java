@@ -100,7 +100,7 @@ public class Action {
 
     /** Returns whether this Action is equal to OTHER. */
     @Override
-    public boolean equals(Object other) {   // Stefan hash?
+    public boolean equals(Object other) {
         if (other == this) {
             return true;
         }

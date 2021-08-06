@@ -142,7 +142,7 @@ public class HugLife {
      * A set of precanned hard-coded worlds. This is terrible
      * style, but hey it's very easy to write this way.
      */
-    public void initialize(String worldName) { // Stefan
+    public void initialize(String worldName) {
         switch (worldName) {
             case "samplesolo" -> addCreature(11, 1, new SampleCreature());
             case "sampleplip" -> {

@@ -1,34 +1,5 @@
 package huglife;
 
-/*************************************************************************
- *  Compilation:  javac StdDraw.java
- *  Execution:    java StdDraw
- *
- *  Standard drawing library. This class provides a basic capability for
- *  creating drawings with your programs. It uses a simple graphics model that
- *  allows you to create drawings consisting of points, lines, and curves
- *  in a window on your computer and to save the drawings to a file.
- *
- *  Developed by Kevin Wayne (best dude award 2011-2014) at Princeton 
- *  University, who so humbly didn't put his name anywhere in this file
- *  that it felt necessary to give him this award.
- *
- *  Todo
- *  ----
- *    -  Add support for gradient fill, etc.
- *    -  Fix setCanvasSize() so that it can only be called once.
- *    -  On some systems, drawing a line (or other shape) that extends way
- *       beyond canvas (e.g., to infinity) dimensions does not get drawn.
- *
- *  Remarks
- *  -------
- *    -  don't use AffineTransform for rescaling since it inverts
- *       images and strings
- *    -  careful using setFont in inner loop within an animation -
- *       it can cause flicker
- * 
- *************************************************************************/
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -52,10 +23,39 @@ import java.util.TreeSet;
  *  For additional documentation, see <a href="http://introcs.cs.princeton.edu/15inout">Section 1.5</a> of
  *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> by Robert Sedgewick and Kevin Wayne.
  *
+ *  *************************************************************************
+ *  *  Compilation:  javac StdDraw.java
+ *  *  Execution:    java StdDraw
+ *  *
+ *  *  Standard drawing library. This class provides a basic capability for
+ *  *  creating drawings with your programs. It uses a simple graphics model that
+ *  *  allows you to create drawings consisting of points, lines, and curves
+ *  *  in a window on your computer and to save the drawings to a file.
+ *  *
+ *  *  Developed by Kevin Wayne (best dude award 2011-2014) at Princeton
+ *  *  University, who so humbly didn't put his name anywhere in this file
+ *  *  that it felt necessary to give him this award.
+ *  *
+ *  *  Todo
+ *  *  ----
+ *  *    -  Add support for gradient fill, etc.
+ *  *    -  Fix setCanvasSize() so that it can only be called once.
+ *  *    -  On some systems, drawing a line (or other shape) that extends way
+ *  *       beyond canvas (e.g., to infinity) dimensions does not get drawn.
+ *  *
+ *  *  Remarks
+ *  *  -------
+ *  *    -  don't use AffineTransform for rescaling since it inverts
+ *  *       images and strings
+ *  *    -  careful using setFont in inner loop within an animation -
+ *  *       it can cause flicker
+ *  *
+ *  *************************************************************************
+ *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener { // TODO refactor me
+public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
     // pre-defined colors
     public static final Color BLACK      = Color.BLACK;
@@ -115,8 +115,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static double xmin, ymin, xmax, ymax;
 
     // for synchronization
-    private static Object mouseLock = new Object();
-    private static Object keyLock = new Object();
+    private static final Object mouseLock = new Object();
+    private static final Object keyLock = new Object();
 
     // default font
     private static final Font DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 16);
@@ -129,7 +129,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static Graphics2D offscreen, onscreen;
 
     // singleton for callbacks: avoids generation of extra .class files
-    private static StdDraw std = new StdDraw();
+    private static final StdDraw std = new StdDraw();
 
     // the frame for drawing to the screen
     private static JFrame frame;
@@ -140,10 +140,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static double mouseY = 0;
 
     // queue of typed key characters
-    private static LinkedList<Character> keysTyped = new LinkedList<Character>();
+    private static final LinkedList<Character> keysTyped = new LinkedList<>();
 
     // set of key codes currently pressed down
-    private static TreeSet<Integer> keysDown = new TreeSet<Integer>();
+    private static final TreeSet<Integer> keysDown = new TreeSet<>();
   
 
     // singleton pattern: client can't instantiate
@@ -209,7 +209,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         frame.setContentPane(draw);
         frame.addKeyListener(std);    // JLabel cannot get keyboard focus
         frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);            // closes all windows
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);            // closes all windows
         // frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);      // closes only current window
         frame.setTitle("Standard Draw");
         frame.setJMenuBar(createMenuBar());
@@ -654,7 +654,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         ImageIcon icon = new ImageIcon(filename);
 
         // try to read from URL
-        if ((icon == null) || (icon.getImageLoadStatus() != MediaTracker.COMPLETE)) {
+        if (icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
             try {
                 URL url = new URL(filename);
                 icon = new ImageIcon(url);
@@ -662,7 +662,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         }
 
         // in case file is inside a .jar
-        if ((icon == null) || (icon.getImageLoadStatus() != MediaTracker.COMPLETE)) {
+        if (icon.getImageLoadStatus() != MediaTracker.COMPLETE) {
             URL url = StdDraw.class.getResource(filename);
             if (url == null) throw new IllegalArgumentException("image " + filename + " not found");
             icon = new ImageIcon(url);
