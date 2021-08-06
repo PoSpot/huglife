@@ -1,13 +1,12 @@
-/** Utilities for lab 5
- *  @author Josh Hug
- */
 package huglife;
 
 import java.util.List;
 import java.util.Random;
 
-
-public class HugLifeUtils {
+/** Utilities for lab 5
+ *  @author Josh Hug
+ */
+public class HugLifeUtils { // TODO make me interface
     private static Random r = null;
 
     /** Returns a random number uniformly between 0 and 1 */
@@ -33,8 +32,8 @@ public class HugLifeUtils {
     }
 
     /** Returns a random number uniformly between 0 and max */
-    public static Direction randomEntry(List<Direction> L) {
-        int dirIndex = randomInt(L.size() - 1);
-        return L.get(dirIndex);
+    public static Direction randomEntry(List<Direction> directions) {
+        var dirIndex = randomInt(directions.size() - 1);
+        return directions.get(dirIndex);
     }
 }

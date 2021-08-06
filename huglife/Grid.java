@@ -10,7 +10,7 @@ import java.util.Queue;
  *  Only intended for use by the HugLife class (or something similar).
  *  @author Josh Hug
  */
-public class Grid {
+public class Grid { // TODO refactor me
     /** Size of the grid */
     private int N;
     /** Total living population of the world */

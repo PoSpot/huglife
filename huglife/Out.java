@@ -24,7 +24,7 @@ import java.util.Locale;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class Out {
+public class Out {  // TODO refactor me
 
     // force Unicode UTF-8 encoding; otherwise it's system dependent
     private static final String CHARSET_NAME = "UTF-8";

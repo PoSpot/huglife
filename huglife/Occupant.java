@@ -16,7 +16,7 @@ public abstract class Occupant {
     protected final Type type;
 
     /** Creates an Occupant with the given type */
-    public Occupant(Type type) {
+    protected Occupant(Type type) {
         this.type = type;
     }
 

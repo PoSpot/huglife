@@ -55,7 +55,7 @@ import java.util.TreeSet;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
+public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener { // TODO refactor me
 
     // pre-defined colors
     public static final Color BLACK      = Color.BLACK;

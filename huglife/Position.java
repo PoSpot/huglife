@@ -17,12 +17,20 @@ public class Position {
         return y;
     }
 
+    @Override
     public boolean equals(Object other) {
         if (other == this) return true;
         if (other == null) return false;
         if (other.getClass() != this.getClass()) return false;
         Position that = (Position) other;
         return this.x == that.x && this.y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
     }
 
     public String toString() {

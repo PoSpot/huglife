@@ -12,7 +12,7 @@ public class TestHugLife {
 
     @Test
     public void populateAndDraw() {
-        Grid g = new Grid(20);
+        var g = new Grid(20);
         g.placeOccupant(0, 10, new SampleCreature());
         g.placeOccupant(5, 5, new SampleCreature());
         g.drawWorld();

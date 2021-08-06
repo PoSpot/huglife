@@ -1,11 +1,4 @@
 package huglife;
-/*************************************************************************
- *  Compilation:  javac In.java
- *  Execution:    java In   (basic test --- see source for required files)
- *
- *  Reads in data of various types from standard input, files, and URLs.
- *
- *************************************************************************/
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -43,11 +36,19 @@ import java.util.regex.Pattern;
  *  see <tt><a href="http://www.docjar.com/html/api/java/util/Scanner.java.html">
  *  Scanner.java</a></tt> (NB: Java 6u23 and earlier uses only \r, \r, \r\n).
  *
+ *  *************************************************************************
+ *  *  Compilation:  javac In.java
+ *  *  Execution:    java In   (basic test --- see source for required files)
+ *  *
+ *  *  Reads in data of various types from standard input, files, and URLs.
+ *  *
+ *  *************************************************************************
+ *
  *  @author David Pritchard
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public final class In {
+public final class In { // TODO refactor me
     
     private Scanner scanner;
 
@@ -73,7 +74,7 @@ public final class In {
     private static final Pattern EVERYTHING_PATTERN
         = Pattern.compile("\\A");
 
-    /*** end: section (1 of 2) of code duplicated from In to StdIn */
+    // end: section (1 of 2) of code duplicated from In to StdIn
 
    /**
      * Create an input stream from standard input.
