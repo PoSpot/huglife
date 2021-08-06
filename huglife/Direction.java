@@ -9,7 +9,6 @@ public enum Direction {
             case BOTTOM -> TOP;
             case LEFT -> RIGHT;
             case RIGHT -> LEFT;
-            default -> throw new IllegalArgumentException("Unsupported direction.");
         };
     }
 }
