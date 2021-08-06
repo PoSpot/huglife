@@ -16,8 +16,8 @@ public abstract class Creature extends Occupant {
     /** Creates a creature with the name N. The intention is that this
       * name should be shared between all creatures of the same type.
       */
-    public Creature(String n) {
-        super(n);
+    public Creature(Type type) {
+        super(type);
     }
 
     /** Called when this creature moves. */
@@ -50,11 +50,11 @@ public abstract class Creature extends Occupant {
         and type is "empty", it will return a list containing Direction.DOWN and
         Direction.LEFT */
     public List<Direction> getNeighborsOfType(Map<Direction, Occupant> n,
-                                              String type) {
+                                              Type type) {
         List<Direction> L = new ArrayList<Direction>();
         for (Map.Entry<Direction, Occupant> entry : n.entrySet()) {
-            String occupantName = entry.getValue().name();
-            if (occupantName.equals(type)) {
+            Type occupantType = entry.getValue().getType();
+            if (occupantType == type) {
                 L.add(entry.getKey());
             }
         }

@@ -27,7 +27,7 @@ public class Action {
     /** There are exactly five possible actions. MOVE, REPLICATE, and ATTACK
      *  are movement based. STAY and DIE are non-movement actions.
      */
-    public enum ActionType {
+    public enum Type {
         MOVE,
         REPLICATE,
         ATTACK,
@@ -44,43 +44,43 @@ public class Action {
       *  so would require nested enums and there is enough new syntax in this
       *  lab as it is. Result is of type AT.
       */
-    public Action(ActionType at) {
-        if (isMoveAction(at)) {
+    public Action(Type t) {
+        if (isMoveAction(t)) {
             throw new IllegalArgumentException("Attempted to create action "
-                             + "of type " + at + " with no direction.");
+                             + "of type " + t + " with no direction.");
         }
-        type = at;
+        type = t;
         dir = null;
         x = UNDEFINED;
         y = UNDEFINED;
     }
 
     /** Creates action of type AT and direction D. */
-    public Action(ActionType at, Direction d) {
-        if (!isMoveAction(at)) {
+    public Action(Type t, Direction d) {
+        if (!isMoveAction(t)) {
             throw new IllegalArgumentException("Attempted to create action "
-                             + "of type " + at + " with a direction.");
+                             + "of type " + t + " with a direction.");
         }
-        this.type = at;
+        this.type = t;
         this.dir = d;
         this.x = UNDEFINED;
         this.y = UNDEFINED;
     }
 
     /** Creates action of type AT and target location X and Y. */
-    public Action(ActionType at, int x, int y) {
-        if (!isMoveAction(at)) {
+    public Action(Type t, int x, int y) {
+        if (!isMoveAction(t)) {
             throw new IllegalArgumentException("Attempted to create action "
-                             + "of type " + at + " with a location.");
+                             + "of type " + t + " with a location.");
         }
-        type = at;
+        type = t;
         dir = null;
         this.x = x;
         this.y = y;
     }
 
     /** The type of the action. */
-    public final ActionType type;
+    public final Type type;
 
     /** The direction of the action (if applicable). */
     public final Direction dir;
@@ -92,14 +92,14 @@ public class Action {
     public final int y;
 
     /** Returns whether the action AT is a move action. */
-    public boolean isMoveAction(ActionType at) {
-        return ((at == ActionType.MOVE) || (at == ActionType.REPLICATE)
-                 || (at == ActionType.ATTACK));
+    public boolean isMoveAction(Type t) {
+        return ((t == Type.MOVE) || (t == Type.REPLICATE)
+                 || (t == Type.ATTACK));
     }
 
 
     /** Returns whether this Action is equal to OTHER. */
-    public boolean equals(Object other) {
+    public boolean equals(Object other) {   // Stefan hash?
         if (other == this) {
             return true;
         }
@@ -114,16 +114,23 @@ public class Action {
                && this.type == that.type;
     }
 
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (dir != null ? dir.hashCode() : 0);
+        result = 31 * result + x;
+        result = 31 * result + y;
+        return result;
+    }
+
     /** Returns string representation of this action. */
     public String toString() {
         if ((dir == null) && (x != UNDEFINED)) {
-            return String.format("Action: " + type + " at " + x + ", "
-                                 + y + ".");
+            return String.format("Action: %s at %d , %d.", type, x, y);
         } else if ((dir != null)) {
-            return String.format("Action: " + type + " in direction "
-                                 + dir + ".");
+            return String.format("Action: %s in direction %s.", type, dir);
         } else {
-            return String.format("Action: " + type + ".");
+            return String.format("Action: %s.", type);
         }
 
     }

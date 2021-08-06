@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Empty extends Occupant {
     public Empty() {
-        super("empty");
+        super(Type.EMPTY);
     }
 
     /** Returns hardcoded black */

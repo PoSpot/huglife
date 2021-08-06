@@ -23,6 +23,26 @@ import java.util.Map;
  */
 public class SampleCreature extends Creature {
     /**
+     * probability of taking a move when ample space available.
+     */
+    private static final double MOVE_PROBABILITY = 0.2;// 0.2;
+    /**
+     * degree of color shift to allow.
+     */
+    private static final int COLOR_SHIFT = 5;//5;
+    /**
+     * fraction of energy to retain when replicating.
+     */
+    private static final double REP_ENERGY_RETAINED = 0.3;
+    /**
+     * fraction of energy to bestow upon offspring.
+     */
+    private static final double REP_ENERGY_GIVEN = 0.65;
+    /**
+     * blue color.
+     */
+    private final int b = 76;
+    /**
      * red color.
      */
     private int r = 155;
@@ -31,26 +51,9 @@ public class SampleCreature extends Creature {
      */
     private int g = 61;
     /**
-     * blue color.
+     * a flag to be used if you want to do smth after seeing a wall
      */
-    private final int b = 76;
-    /**
-     * probability of taking a move when ample space available.
-     */
-    private final double moveProbability = 0.2;// 0.2; TODO see how is used
-    /**
-     * degree of color shift to allow.
-     */
-    private final int colorShift = 5;//5;
-    /**
-     * fraction of energy to retain when replicating.
-     */
-    private final double repEnergyRetained = 0.3;
-    /**
-     * fraction of energy to bestow upon offspring.
-     */
-    private final double repEnergyGiven = 0.65;
-    private boolean sawWall = false;
+    private boolean reactOnWall = false;
 
 
     /**
@@ -59,7 +62,7 @@ public class SampleCreature extends Creature {
      * its energy should never decrease.
      */
     public SampleCreature(double e) {
-        super("samplecreature");
+        super(Occupant.Type.SAMPLE_CREATURE);
         energy = e;
     }
 
@@ -89,9 +92,9 @@ public class SampleCreature extends Creature {
      * Nothing special happens when a SampleCreature moves.
      */
     public void move() {
-        if (sawWall) {
+        if (reactOnWall) {
             swapGreenAndRed();
-            sawWall = false;
+            reactOnWall = false;
         }
     }
 
@@ -109,7 +112,7 @@ public class SampleCreature extends Creature {
      * random information.
      */
     public void stay() {
-        r += HugLifeUtils.randomInt(-colorShift, colorShift);
+        r += HugLifeUtils.randomInt(-COLOR_SHIFT, COLOR_SHIFT);
         r = Math.min(r, 255);
         r = Math.max(r, 0);
     }
@@ -135,78 +138,71 @@ public class SampleCreature extends Creature {
 
     private Action chooseSimpleCreature(Map<Direction, Occupant> neighbors) {
 
-        List<Direction> empties = getNeighborsOfType(neighbors, "empty");
+        List<Direction> empties = getNeighborsOfType(neighbors, Occupant.Type.EMPTY);
         if (empties.size() == 1) {
             Direction moveDir = empties.get(0);
-            return new Action(Action.ActionType.MOVE, moveDir);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
-        if (empties.size() > 1) {
-            if (HugLifeUtils.random() < moveProbability) {
-                Direction moveDir = HugLifeUtils.randomEntry(empties);
-                return new Action(Action.ActionType.MOVE, moveDir);
-            }
+        if (empties.size() > 1 && HugLifeUtils.random() < MOVE_PROBABILITY) {
+            Direction moveDir = HugLifeUtils.randomEntry(empties);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
-        return new Action(Action.ActionType.STAY);
+        return new Action(Action.Type.STAY);
     }
 
     private Action chooseReplicateOnWall(Map<Direction, Occupant> neighbors) {
-        List<Direction> empties = getNeighborsOfType(neighbors, "empty");
+        List<Direction> empties = getNeighborsOfType(neighbors, Occupant.Type.EMPTY);
         if (empties.size() == 1) {
             Direction moveDir = empties.get(0);
-            return new Action(Action.ActionType.MOVE, moveDir);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
         // Die in corner
-        List<Direction> walls = getNeighborsOfType(neighbors, "impassible");
+        List<Direction> walls = getNeighborsOfType(neighbors, Occupant.Type.IMPASSABLE);
         if (walls.size() > 1) {
-            return new Action(Action.ActionType.DIE);
+            return new Action(Action.Type.DIE);
         }
 
         // Replicate on wall
-//        List<Direction> walls = getNeighborsOfType(neighbors, "impassible");
         if (!walls.isEmpty() && !empties.isEmpty()) {
             Direction moveDir = HugLifeUtils.randomEntry(empties);
-            return new Action(Action.ActionType.REPLICATE, moveDir);
+            return new Action(Action.Type.REPLICATE, moveDir);
         }
 
-        if (empties.size() > 1) {
-            if (HugLifeUtils.random() < moveProbability) {
-                Direction moveDir = HugLifeUtils.randomEntry(empties);
-                return new Action(Action.ActionType.MOVE, moveDir);
-            }
+        if (empties.size() > 1 && HugLifeUtils.random() < MOVE_PROBABILITY) {
+            Direction moveDir = HugLifeUtils.randomEntry(empties);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
-        return new Action(Action.ActionType.STAY);
+        return new Action(Action.Type.STAY);
     }
 
     private Action chooseMoveAwayFromWall(Map<Direction, Occupant> neighbors) {
 
-        List<Direction> empties = getNeighborsOfType(neighbors, "empty");
+        List<Direction> empties = getNeighborsOfType(neighbors, Occupant.Type.EMPTY);
         if (empties.size() == 1) {
             Direction moveDir = empties.get(0);
-            return new Action(Action.ActionType.MOVE, moveDir);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
         // move away from wall and change color
-        List<Direction> walls = getNeighborsOfType(neighbors, "impassible");
+        List<Direction> walls = getNeighborsOfType(neighbors, Occupant.Type.IMPASSABLE);
         if (walls.size() == 1) {
             Direction away = walls.get(0).reverse();
             if (empties.contains(away)) {
-                sawWall = true;
-                return new Action(Action.ActionType.MOVE, away);
+                reactOnWall = true;
+                return new Action(Action.Type.MOVE, away);
             }
         }
 
-        if (empties.size() > 1) {
-            if (HugLifeUtils.random() < moveProbability) {
-                Direction moveDir = HugLifeUtils.randomEntry(empties);
-                return new Action(Action.ActionType.MOVE, moveDir);
-            }
+        if (empties.size() > 1 && HugLifeUtils.random() < MOVE_PROBABILITY) {
+            Direction moveDir = HugLifeUtils.randomEntry(empties);
+            return new Action(Action.Type.MOVE, moveDir);
         }
 
-        return new Action(Action.ActionType.STAY);
+        return new Action(Action.Type.STAY);
     }
 
     /**
@@ -222,8 +218,8 @@ public class SampleCreature extends Creature {
      * SampleCreature.
      */
     public SampleCreature replicate() {
-        energy = energy * repEnergyRetained;
-        double babyEnergy = energy * repEnergyGiven;
+        energy = energy * REP_ENERGY_RETAINED;
+        double babyEnergy = energy * REP_ENERGY_GIVEN;
         return new SampleCreature(babyEnergy);
     }
 

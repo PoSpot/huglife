@@ -9,17 +9,20 @@ import java.awt.*;
  *     Creature, Empty, and Impassible only.
  */
 public abstract class Occupant {
-    /** Name for this type of Occupant. */
-    protected final String name;
 
-    /** Creates an Occupant with name equal to N. */
-    public Occupant(String n) {
-        name = n;
+    public enum Type {EMPTY, IMPASSABLE, SAMPLE_CREATURE, PLIP, CLORUS}
+
+    /** Type for this type of Occupant. */
+    protected final Type type;
+
+    /** Creates an Occupant with the given type */
+    public Occupant(Type type) {
+        this.type = type;
     }
 
-    /** Returns the name of this occupant. */
-    public String name() {
-        return name;
+    /** Returns the type of this occupant. */
+    public Type getType() {
+        return type;
     }
 
     /** Returns a Color object given R, G, and B values.

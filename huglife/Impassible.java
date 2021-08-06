@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class Impassible extends Occupant {
     public Impassible() {
-        super("impassible");
+        super(Type.IMPASSABLE);
     }
 
     /** Returns hardcoded black */

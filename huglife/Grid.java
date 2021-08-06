@@ -53,7 +53,7 @@ public class Grid {
 
     /** Returns true if X, Y is empty */
     private boolean isEmpty(int x, int y) {
-        return getOccupant(x, y).name.equals("empty");
+        return getOccupant(x, y).getType() == Occupant.Type.EMPTY;
     }
 
     /** Returns true if X and Y contains a living thing,
@@ -91,7 +91,7 @@ public class Grid {
             Occupant oldOccupant = getOccupant(x, y);
             throw new IllegalArgumentException(
                       String.format("Tried to place a %s at (%d, %d), but "
-                       + " space is already occupied by a %s.", c.name,
+                       + " space is already occupied by a %s.", c.getType(),
                        x, y, oldOccupant));
         }
 
@@ -126,7 +126,7 @@ public class Grid {
             Occupant oldOccupant = getOccupant(x, y);
             throw new IllegalArgumentException(
                       String.format("Tried to place a %s at (%d, %d), but "
-                       + " space is already occupied by a %s.", o.name,
+                       + " space is already occupied by a %s.", o.getType(),
                        x, y, oldOccupant));
         }
 
@@ -201,7 +201,7 @@ public class Grid {
         for (int j = N; j >= 0; j--) {
              for (int i = 0; i < N; i++) {
                 Occupant o = getOccupant(i, j);
-                out.println(o.name + " " + i + " " + j);
+                out.println(o.getType() + " " + i + " " + j);
             }
             out.println();
         }
@@ -332,23 +332,23 @@ public class Grid {
         int tx = p.x();
         int ty = p.y();
 
-        if (a.type == Action.ActionType.MOVE) {
+        if (a.type == Action.Type.MOVE) {
             doMove(x, y, tx, ty);
         }
 
-        if (a.type == Action.ActionType.REPLICATE) {
+        if (a.type == Action.Type.REPLICATE) {
             doReplicate(x, y, tx, ty);
         }
 
-        if (a.type == Action.ActionType.DIE) {
+        if (a.type == Action.Type.DIE) {
             doDie(x, y);
         }
 
-        if (a.type == Action.ActionType.ATTACK) {
+        if (a.type == Action.Type.ATTACK) {
             doAttack(x, y, tx, ty);
         }
 
-        if (a.type == Action.ActionType.STAY) {
+        if (a.type == Action.Type.STAY) {
             doStay(x, y);
         }
 
@@ -364,7 +364,7 @@ public class Grid {
         creatureCheck(x, y, "requestAction");
         Creature c = (Creature) getOccupant(x, y);
         if (c.energy() < 0) {
-            return new Action(Action.ActionType.DIE);
+            return new Action(Action.Type.DIE);
         }
 
         Map<Direction, Occupant> nbot = neighbors(x, y);
@@ -406,7 +406,7 @@ public class Grid {
 
             String msg = String.format("%s tried to %s from " +
                          "(%d, %d) to (%d, %d) already occupied by %s.",
-                         from.name(), moveStr, x, y, tx, ty, to.name());
+                         from.getType(), moveStr, x, y, tx, ty, to.getType());
 
             throw new IllegalArgumentException(msg);
         }
