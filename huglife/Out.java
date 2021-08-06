@@ -1,15 +1,8 @@
 package huglife;
-/*************************************************************************
- *  Compilation:  javac Out.java
- *  Execution:    java Out
- *
- *  Writes data of various types to: stdout, file, or socket.
- *
- *************************************************************************/
-
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -21,18 +14,26 @@ import java.util.Locale;
  *  <i>Introduction to Programming in Java: An Interdisciplinary Approach</i>
  *  by Robert Sedgewick and Kevin Wayne.
  *
+ *  *************************************************************************
+ *  *  Compilation:  javac Out.java
+ *  *  Execution:    java Out
+ *  *
+ *  *  Writes data of various types to: stdout, file, or socket.
+ *  *
+ *  *************************************************************************
+ *
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class Out {  // TODO refactor me
+public class Out {
 
     // force Unicode UTF-8 encoding; otherwise it's system dependent
-    private static final String CHARSET_NAME = "UTF-8";
+    private static final String CHARSET_NAME = StandardCharsets.UTF_8.name();
 
     // assume language = English, country = US for consistency with In
     private static final Locale LOCALE = Locale.US;
 
-    private PrintWriter out;
+    private PrintWriter writer;
 
    /**
      * Create an Out object using an OutputStream.
@@ -40,7 +41,7 @@ public class Out {  // TODO refactor me
     public Out(OutputStream os) {
         try {
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
-            out = new PrintWriter(osw, true);
+            writer = new PrintWriter(osw, true);
         }
         catch (IOException e) { e.printStackTrace(); }
     }
@@ -57,7 +58,7 @@ public class Out {  // TODO refactor me
         try {
             OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
-            out = new PrintWriter(osw, true);
+            writer = new PrintWriter(osw, true);
         }
         catch (IOException e) { e.printStackTrace(); }
     }
@@ -69,7 +70,7 @@ public class Out {  // TODO refactor me
         try {
             OutputStream os = new FileOutputStream(s);
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_NAME);
-            out = new PrintWriter(osw, true);
+            writer = new PrintWriter(osw, true);
         }
         catch (IOException e) { e.printStackTrace(); }
     }
@@ -77,7 +78,7 @@ public class Out {  // TODO refactor me
    /**
      * Close the output stream.
      */
-    public void close() { out.close(); }
+    public void close() { writer.close(); }
 
 
 
@@ -85,63 +86,63 @@ public class Out {  // TODO refactor me
      * Terminate the line.
      */
     public void println() {
-        out.println();
+        writer.println();
     }
 
    /**
      * Print an object and then terminate the line.
      */
     public void println(Object x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print a boolean and then terminate the line.
      */
     public void println(boolean x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print a char and then terminate the line.
      */
     public void println(char x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print an double and then terminate the line.
      */
     public void println(double x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print a float and then terminate the line.
      */
     public void println(float x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print an int and then terminate the line.
      */
     public void println(int x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print a long and then terminate the line.
      */
     public void println(long x) {
-        out.println(x);
+        writer.println(x);
     }
 
    /**
      * Print a byte and then terminate the line.
      */
     public void println(byte x) {
-        out.println(x);
+        writer.println(x);
     }
 
 
@@ -150,71 +151,71 @@ public class Out {  // TODO refactor me
      * Flush the output stream.
      */
     public void print() {
-        out.flush();
+        writer.flush();
     }
 
    /**
      * Print an object and then flush the output stream.
      */
     public void print(Object x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print an boolean and then flush the output stream.
      */
     public void print(boolean x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print an char and then flush the output stream.
      */
     public void print(char x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print an double and then flush the output stream.
      */
     public void print(double x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print a float and then flush the output stream.
      */
     public void print(float x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print an int and then flush the output stream.
      */
     public void print(int x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print a long and then flush the output stream.
      */
     public void print(long x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
      * Print a byte and then flush the output stream.
      */
     public void print(byte x) {
-        out.print(x);
-        out.flush();
+        writer.print(x);
+        writer.flush();
     }
 
    /**
@@ -222,8 +223,8 @@ public class Out {  // TODO refactor me
      * and then flush the output stream.
      */
     public void printf(String format, Object... args) {
-        out.printf(LOCALE, format, args);
-        out.flush();
+        writer.printf(LOCALE, format, args);
+        writer.flush();
     }
 
    /**
@@ -231,8 +232,8 @@ public class Out {  // TODO refactor me
      * and then flush the output stream.
      */
     public void printf(Locale locale, String format, Object... args) {
-        out.printf(locale, format, args);
-        out.flush();
+        writer.printf(locale, format, args);
+        writer.flush();
     }
 
 

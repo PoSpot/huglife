@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class HugLife {
 
     // TODO stop when stuck
-    // TODO some git mess maybe?
+    // TODO some git mess maybe? (visible on push window)
 
     /**
      * Size of the world. Probably best to keep this under 100
