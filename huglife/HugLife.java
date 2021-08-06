@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 public class HugLife {
 
     // TODO stop when stuck
+    // TODO some git mess maybe?
 
     /**
      * Size of the world. Probably best to keep this under 100
@@ -141,7 +142,7 @@ public class HugLife {
      * A set of precanned hard-coded worlds. This is terrible
      * style, but hey it's very easy to write this way.
      */
-    public void initialize(String worldName) { // TODO see why terrible
+    public void initialize(String worldName) { // Stefan
         switch (worldName) {
             case "samplesolo" -> addCreature(11, 1, new SampleCreature());
             case "sampleplip" -> {

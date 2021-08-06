@@ -1,7 +1,7 @@
 package huglife;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Queue;
 
@@ -10,45 +10,42 @@ import java.util.Queue;
  *  Only intended for use by the HugLife class (or something similar).
  *  @author Josh Hug
  */
-public class Grid { // TODO refactor me
+public class Grid {
     /** Size of the grid */
-    private int N;
+    private final int n;
     /** Total living population of the world */
     private int population;
     /** 2D grid of all the occupants */
-    private Occupant[][] occupants;
+    private final Occupant[][] occupants;
     /** Not the most efficient data structure! We'll end up spending
      * a linear amount of time scanning through this queue, when
      * we could get this done essentially for free. Maybe I'll
      * fix this later, but I don't think it's a performance bottleneck.
      */
-    private Queue<Position> moveQueue;
+    private final Queue<Position> moveQueue;
 
     /** dummy position used to track when an entire cycle has been completed */
     private static final Position sentinel = new Position(-23, -23);
 
 
-    /** Creates a grid of size N */
-    public Grid(int N) {
-        this.N = N;
+    /** Creates a grid of size n */
+    public Grid(int n) {
+        this.n = n;
         population = 0;
-        occupants = new Occupant[N][N];
-        for (int y = 0; y < N; y++) {
-            for (int x = 0; x < N; x++) {
+        occupants = new Occupant[n][n];
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
                 occupants[y][x] = new Empty();
             }
         }
-        moveQueue = new ArrayDeque<Position>();
+        moveQueue = new ArrayDeque<>();
         moveQueue.add(sentinel);
 
     }
 
     /** Returns true if X and Y are in bounds */
     private boolean inBounds(int x, int y) {
-        if (x < 0 || y < 0 || x >= N || y >= N) {
-            return false;
-        }
-        return true;
+        return x >= 0 && y >= 0 && x < n && y < n;
     }
 
     /** Returns true if X, Y is empty */
@@ -56,12 +53,12 @@ public class Grid { // TODO refactor me
         return getOccupant(x, y).getType() == Occupant.Type.EMPTY;
     }
 
-    /** Returns true if X and Y contains a living thing,
+    /** Returns true if X and Y doesn't contain a living thing,
         i.e. if the contents are anything other than empty
         or impassible. Wowza, actually useful instanceof!  */
-    private boolean isCreature(int x, int y) {
-        Occupant o = getOccupant(x, y);
-        return o instanceof Creature;
+    private boolean isNotCreature(int x, int y) {
+        var o = getOccupant(x, y);
+        return !(o instanceof Creature);
     }
 
     /** Returns occupant of X and Y */
@@ -88,7 +85,7 @@ public class Grid { // TODO refactor me
         3. add to deque */
     void createCreature(int x, int y, Creature c) {
         if (!isEmpty(x, y)) {
-            Occupant oldOccupant = getOccupant(x, y);
+            var oldOccupant = getOccupant(x, y);
             throw new IllegalArgumentException(
                       String.format("Tried to place a %s at (%d, %d), but "
                        + " space is already occupied by a %s.", c.getType(),
@@ -107,7 +104,7 @@ public class Grid { // TODO refactor me
         2. remove from grid
         3. remove from deque */
     void destroyCreature(int x, int y) {
-        if (!isCreature(x, y)) {
+        if (isNotCreature(x, y)) {
             throw new IllegalArgumentException(
                       String.format("Tried to destroy a creature at (%d, %d), but " +
                              "no creature at this position.", x, y));
@@ -123,7 +120,7 @@ public class Grid { // TODO refactor me
 
     void placeOccupant(int x, int y, Occupant o) {
         if (!isEmpty(x, y)) {
-            Occupant oldOccupant = getOccupant(x, y);
+            var oldOccupant = getOccupant(x, y);
             throw new IllegalArgumentException(
                       String.format("Tried to place a %s at (%d, %d), but "
                        + " space is already occupied by a %s.", o.getType(),
@@ -155,8 +152,8 @@ public class Grid { // TODO refactor me
       * of position X and Y */
 
     public Map<Direction, Occupant> neighbors(int x, int y) {
-        HashMap<Direction, Occupant> neighbors =
-                new HashMap<Direction, Occupant>();
+        EnumMap<Direction, Occupant> neighbors =
+                new EnumMap<>(Direction.class);
         Occupant top = getOccupant(x, y + 1);
         Occupant bottom = getOccupant(x, y - 1);
         Occupant left = getOccupant(x - 1, y);
@@ -179,12 +176,12 @@ public class Grid { // TODO refactor me
     public void drawWorld() {
         StdDraw.clear();
         StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setXscale(0, N);
-        StdDraw.setYscale(0, N);
-        StdDraw.filledSquare(N / 2.0, N / 2.0, N / 2.0);
+        StdDraw.setXscale(0, n);
+        StdDraw.setYscale(0, n);
+        StdDraw.filledSquare(n / 2.0, n / 2.0, n / 2.0);
 
-        for (int x = 0; x < N; x += 1) {
-            for (int y = 0; y < N; y += 1) {
+        for (int x = 0; x < n; x += 1) {
+            for (int y = 0; y < n; y += 1) {
                 Occupant o = getOccupant(x, y);
                 StdDraw.setPenColor(o.color());
                 StdDraw.filledSquare(x + 0.5, y + 0.5, 0.45);
@@ -198,8 +195,8 @@ public class Grid { // TODO refactor me
      */
     public void writeWorld(String worldName) {
         Out out = new Out("huglife/" + worldName + ".world");
-        for (int j = N; j >= 0; j--) {
-             for (int i = 0; i < N; i++) {
+        for (int j = n; j >= 0; j--) {
+             for (int i = 0; i < n; i++) {
                 Occupant o = getOccupant(i, j);
                 out.println(o.getType() + " " + i + " " + j);
             }
@@ -235,15 +232,13 @@ public class Grid { // TODO refactor me
       *  This can happen because a creature just chose the die action */
     private void removeFromQueue(int x, int y) {
         Position p = new Position(x, y);
-        if (moveQueue.contains(p)) {
-            moveQueue.remove(p);
-        }
+        moveQueue.remove(p);
     }
 
     /** Puts position X, Y into the move queue. */
     private void getInLine(int x, int y) {
         Position p = new Position(x, y);
-        if (!isCreature(x, y)) {
+        if (isNotCreature(x, y)) {
 
             String msg = String.format("Tried to add creature at (%d, %d) to " +
                          "the move queue, but no creature exists at that spot.",
@@ -267,7 +262,6 @@ public class Grid { // TODO refactor me
     /** Peforms a move action from X, Y to TX, TY. */
     void doMove(int x, int y, int tx, int ty) {
         Creature from = getCreature(x, y);
-        Occupant to = getOccupant(tx, ty);
 
         collisionCheck(x, y, tx, ty, "move");
 
@@ -282,7 +276,6 @@ public class Grid { // TODO refactor me
     /** Perform the replicate action from X, Y to TX, TY */
     void doReplicate(int x, int y, int tx, int ty) {
         Creature from = getCreature(x, y);
-        Occupant to = getOccupant(tx, ty);
 
         creatureCheck(x, y, "replicate");
         collisionCheck(x, y, tx, ty, "replicate");
@@ -417,7 +410,7 @@ public class Grid { // TODO refactor me
      *  ACTIONSTR is the type of action, printed for debugging reasons.
      */
     private void creatureCheck(int x, int y, String actionStr) {
-        if (!isCreature(x, y)) {
+        if (isNotCreature(x, y)) {
 
             String msg = String.format("Something tried to %s at " +
                          "(%d, %d), but no creature exists at that spot.",
@@ -431,7 +424,7 @@ public class Grid { // TODO refactor me
      */
 
     private void creatureCheck(int x, int y) {
-        if (!isCreature(x, y)) {
+        if (isNotCreature(x, y)) {
 
             String msg = String.format("Tried to get creature from " +
                          "(%d, %d), but no creature exists at that spot.",
@@ -445,12 +438,12 @@ public class Grid { // TODO refactor me
      *  Asserts that the queue matches the world state.
      */
     private void assertQueueCorrect() {
-        for (int x = 0; x < N; x++) {
-            for (int y = 0; y < N; y++) {
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
                 Position p = new Position(x, y);
                 Occupant o = getOccupant(x, y);
                 if ((o instanceof Creature) && (!moveQueue.contains(p))) {
-                    throw new Error(String.format(
+                    throw new IllegalStateException(String.format(
                           "(%d, %d) is missing from moveQueue", x, y));
                 }
             }
