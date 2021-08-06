@@ -1,6 +1,6 @@
 package huglife;
 
-import creatures.Plip;
+import creatures_to_delete.Plip;
 
 import java.util.logging.Logger;
 

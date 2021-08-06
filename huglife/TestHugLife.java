@@ -24,6 +24,7 @@ public class TestHugLife {
     }
 
     public static void main(String[] args) {
-//        jh61b.junit.textui.runClasses(TestHugLife.class);   TODO
+        // Their way to reu tests
+//        jh61b.junit.textui.runClasses(TestHugLife.class);
     }
 } 
