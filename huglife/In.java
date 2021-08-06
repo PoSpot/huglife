@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -48,14 +50,14 @@ import java.util.regex.Pattern;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public final class In { // TODO refactor me
+public final class In {
     
     private Scanner scanner;
 
     /*** begin: section (1 of 2) of code duplicated from In to StdIn */
     
     // assume Unicode UTF-8 encoding
-    private static final String CHARSET_NAME = "UTF-8";
+    private static final String CHARSET_NAME = StandardCharsets.UTF_8.name();
 
     // assume language = English, country = US for consistency with System.out.
     private static final Locale LOCALE = Locale.US;
@@ -76,6 +78,8 @@ public final class In { // TODO refactor me
 
     // end: section (1 of 2) of code duplicated from In to StdIn
 
+    private static final Logger logger = Logger.getLogger(In.class.getName());
+
    /**
      * Create an input stream from standard input.
      */
@@ -94,7 +98,7 @@ public final class In { // TODO refactor me
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + socket);
+            logger.severe("Could not open " + socket);
         }
     }
 
@@ -109,7 +113,7 @@ public final class In { // TODO refactor me
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + url);
+            logger.severe("Could not open " + url);
         }
     }
 
@@ -122,7 +126,7 @@ public final class In { // TODO refactor me
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + file);
+            logger.severe("Could not open " + file);
         }
     }
 
@@ -157,7 +161,7 @@ public final class In { // TODO refactor me
             scanner.useLocale(LOCALE);
         }
         catch (IOException ioe) {
-            System.err.println("Could not open " + s);
+            logger.severe("Could not open " + s);
         }
     }
 
@@ -376,6 +380,7 @@ public final class In { // TODO refactor me
      * @deprecated Clearer to use 
      * <tt>new In(filename)</tt>.{@link #readAllInts()}
      */
+    @Deprecated
     public static int[] readInts(String filename) {
         return new In(filename).readAllInts();
     }
@@ -385,6 +390,7 @@ public final class In { // TODO refactor me
      * @deprecated Clearer to use 
      * <tt>new In(filename)</tt>.{@link #readAllDoubles()}
      */
+   @Deprecated
     public static double[] readDoubles(String filename) {
         return new In(filename).readAllDoubles();
     }
@@ -394,6 +400,7 @@ public final class In { // TODO refactor me
      * @deprecated Clearer to use 
      * <tt>new In(filename)</tt>.{@link #readAllStrings()}
      */
+   @Deprecated
     public static String[] readStrings(String filename) {
         return new In(filename).readAllStrings();
     }
@@ -402,6 +409,7 @@ public final class In { // TODO refactor me
      * Reads all ints from stdin 
      * @deprecated Clearer to use {@link StdIn#readAllInts()}
      */
+    @Deprecated
     public static int[] readInts() {
         return new In().readAllInts();
     }
@@ -410,6 +418,7 @@ public final class In { // TODO refactor me
      * Reads all doubles from stdin
      * @deprecated Clearer to use {@link StdIn#readAllDoubles()}
      */
+   @Deprecated
     public static double[] readDoubles() {
         return new In().readAllDoubles();
     }
@@ -418,6 +427,7 @@ public final class In { // TODO refactor me
      * Reads all strings from stdin
      * @deprecated Clearer to use {@link StdIn#readAllStrings()}
      */
+   @Deprecated
     public static String[] readStrings() {
         return new In().readAllStrings();
     }
@@ -430,72 +440,72 @@ public final class In { // TODO refactor me
         String urlName = "http://introcs.cs.princeton.edu/stdlib/InTest.txt";
 
         // read from a URL
-        System.out.println("readAll() from URL " + urlName);
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readAll() from URL " + urlName);
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In(urlName);
-            System.out.println(in.readAll());
+            logger.info(in.readAll());
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
         // read one line at a time from URL
-        System.out.println("readLine() from URL " + urlName);
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readLine() from URL " + urlName);
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In(urlName);
             while (!in.isEmpty()) {
                 String s = in.readLine();
-                System.out.println(s);
+                logger.info(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
         // read one string at a time from URL
-        System.out.println("readString() from URL " + urlName);
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readString() from URL " + urlName);
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In(urlName);
             while (!in.isEmpty()) {
                 String s = in.readString();
-                System.out.println(s);
+                logger.info(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
 
         // read one line at a time from file in current directory
-        System.out.println("readLine() from current directory");
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readLine() from current directory");
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In("./InTest.txt");
             while (!in.isEmpty()) {
                 String s = in.readLine();
-                System.out.println(s);
+                logger.info(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
 
         // read one line at a time from file using relative path
-        System.out.println("readLine() from relative path");
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readLine() from relative path");
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In("../stdlib/InTest.txt");
             while (!in.isEmpty()) {
                 String s = in.readLine();
-                System.out.println(s);
+                logger.info(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
         // read one char at a time
-        System.out.println("readChar() from file");
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readChar() from file");
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In("InTest.txt");
             while (!in.isEmpty()) {
@@ -503,37 +513,37 @@ public final class In { // TODO refactor me
                 System.out.print(c);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
+        logger.info("");
 
         // read one line at a time from absolute OS X / Linux path
-        System.out.println("readLine() from absolute OS X / Linux path");
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readLine() from absolute OS X / Linux path");
+        logger.info("---------------------------------------------------------------------------");
         in = new In("/n/fs/introcs/www/java/stdlib/InTest.txt");
         try {
             while (!in.isEmpty()) {
                 String s = in.readLine();
-                System.out.println(s);
+                logger.info(s);
             }
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
 
         // read one line at a time from absolute Windows path
-        System.out.println("readLine() from absolute Windows path");
-        System.out.println("---------------------------------------------------------------------------");
+        logger.info("readLine() from absolute Windows path");
+        logger.info("---------------------------------------------------------------------------");
         try {
             in = new In("G:\\www\\introcs\\stdlib\\InTest.txt");
             while (!in.isEmpty()) {
                 String s = in.readLine();
-                System.out.println(s);
+                logger.info(s);
             }
-            System.out.println();
+            logger.info("");
         }
-        catch (Exception e) { System.out.println(e); }
-        System.out.println();
+        catch (Exception e) { logger.severe(e.toString()); }
+        logger.info("");
 
     }
 
