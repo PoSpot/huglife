@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static huglife.HugLifeUtils.randomEntry;
 
-public class Plip extends Creature {    // TODO compare me with lab's Plip
+public class Plip extends Creature {
 
     public static final int GREEN_MAX = 255;
     public static final int GREEN_MIN = 63;
@@ -31,6 +31,10 @@ public class Plip extends Creature {    // TODO compare me with lab's Plip
         this.setEnergyAndColor(energy);
     }
 
+    public Plip() {
+        this(1.0);
+    }
+
     /**
      * To be used always when energy needs to be set
      * @param energy [0,2]
@@ -48,10 +52,12 @@ public class Plip extends Creature {    // TODO compare me with lab's Plip
     @Override
     public void move() {
         this.setEnergyAndColor(energy - 0.15);
-    }// TODO no 0 bondary?
+    }
 
     @Override
-    public void attack(Creature c) {}
+    public void attack(Creature c) {
+        throw new UnsupportedOperationException("Plips don't attack.");
+    }
 
     @Override
     public Plip replicate() {

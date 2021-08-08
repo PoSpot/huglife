@@ -21,19 +21,23 @@ import static org.junit.Assert.assertNotSame;
 public class TestPlip {
 
     @Test
-    public void setEnergyAndColor() {
+    public void setEnergyAndColor_shouldSucceed_onValidInput() {
         Plip p = new Plip(2.0);
         assertEquals(2.0, p.energy(), 0.01);
         assertEquals(new Color(99, 255, 76), p.color());
+    }
 
-        p.setEnergyAndColor(0.1);
-        assertEquals(0.1, p.energy(), 0.01);
-        assertEquals(new Color(99, 72, 76), p.color());
-
-        p.setEnergyAndColor(3.0);   // separate tests?
+    @Test
+    public void setEnergyAndColor_shouldSetMax_onTooHigh() {
+        Plip p = new Plip(2.0);
+        p.setEnergyAndColor(3.0);
         assertEquals(2.0, p.energy(), 0.01);
         assertEquals(new Color(99, 255, 76), p.color());
+    }
 
+    @Test
+    public void setEnergyAndColor_shouldSetZero_onNegative() {
+        Plip p = new Plip(2.0);
         p.setEnergyAndColor(-1.0);
         assertEquals(0, p.energy(), 0.01);
         assertEquals(new Color(99, 63, 76), p.color());
@@ -50,7 +54,7 @@ public class TestPlip {
     }
 
     @Test
-    public void move() {
+    public void move_shouldLoseEnergy() {
         Plip p = new Plip(2.0);
         p.move();
         assertEquals(1.85, p.energy(), 0.01);
@@ -60,7 +64,15 @@ public class TestPlip {
     }
 
     @Test
-    public void stay() {
+    public void move_shouldHaveZeroEnergy_WhenTooLow() {
+        Plip p = new Plip(0.1);
+        p.move();
+        assertEquals(0.0, p.energy(), 0.01);
+        assertEquals(new Color(99, 63, 76), p.color());
+    }
+
+    @Test
+    public void stay_shouldGainEnergy() {
         Plip p = new Plip(1.70);
         p.stay();
         assertEquals(1.90, p.energy(), 0.01);
@@ -70,7 +82,17 @@ public class TestPlip {
     }
 
     @Test
-    public void attack() {// ?
+    public void stay_shouldHaveMaxEnergy_WhenTooHigh() {
+        Plip p = new Plip(2.0);
+        p.stay();
+        assertEquals(2.0, p.energy(), 0.01);
+        assertEquals(new Color(99, 255, 76), p.color());
+    }
+
+    @Test(expected =  UnsupportedOperationException.class)
+    public void attack() {
+        Plip p = new Plip(1.70);
+        p.attack(new SampleCreature());
     }
 
     @Test
@@ -86,7 +108,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseWhenSurrounded() {
+    public void chooseAction_ShouldReturnStay_WhenSurrounded() {
         Plip p = new Plip(1.2);
         EnumMap<Direction, Occupant> surrounded = new EnumMap<>(Direction.class);
         surrounded.put(Direction.TOP, new Impassible());
@@ -98,7 +120,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseWithEnoughEnergyAndNotSurrounded() {
+    public void chooseAction_shouldReturnReplicate_WithEnoughEnergyAndNotSurrounded() {
         Plip p = new Plip(1.2);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
         neighbours.put(Direction.TOP, new Impassible());
@@ -111,7 +133,7 @@ public class TestPlip {
 
     @Test
     @Ignore
-    public void chooseWithLessEnergyAndNotSurroundedAndClorus() {
+    public void chooseAction_shouldReturnMove_WithLessEnergyAndNotSurroundedAndClorus() {
         // given
         Plip p = new Plip(0.1);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
@@ -129,7 +151,7 @@ public class TestPlip {
 
     @Test
     @Ignore
-    public void chooseWithLessEnergyAndNotSurroundedAndClorusAndHighRandom() {
+    public void chooseAction_shouldReturnStay_WithLessEnergyAndNotSurroundedAndClorusAndHighRandom() {
         // given
         Plip p = new Plip(0.1);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
@@ -146,7 +168,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseWithLessEnergyAndNotSurroundedAndNoClorus() {
+    public void chooseAction_shouldReturnStay_WithLessEnergyAndNotSurroundedAndNoClorus() {
         Plip p = new Plip(0.7);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
         neighbours.put(Direction.TOP, new Impassible());
