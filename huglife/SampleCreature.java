@@ -62,7 +62,7 @@ public class SampleCreature extends Creature {
      * its energy should never decrease.
      */
     public SampleCreature(double e) {
-        super(Occupant.Type.SAMPLE_CREATURE);
+        super(Type.SAMPLE_CREATURE);
         energy = e;
     }
 

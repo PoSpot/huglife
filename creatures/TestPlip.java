@@ -20,7 +20,7 @@ public class TestPlip {
 
     @Test
     public void testBasics() {
-        creatures_to_delete.Plip p = new creatures_to_delete.Plip(2);
+        Plip p = new Plip(2);
         assertEquals(2, p.energy(), 0.01);
         assertEquals(new Color(99, 255, 76), p.color());
         p.move();
@@ -35,9 +35,9 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-        creatures_to_delete.Plip p = new creatures_to_delete.Plip(2);
+        Plip p = new Plip(2);
         double newEnergy = p.energy() / 2;
-        creatures_to_delete.Plip q = p.replicate();
+        Plip q = p.replicate();
         assertNotSame(p,q);
         assertEquals(p.energy(), newEnergy, 0.01);
         assertEquals(q.energy(), newEnergy, 0.01);
@@ -45,7 +45,7 @@ public class TestPlip {
 
     @Test
     public void testChoose() {
-        creatures_to_delete.Plip p = new Plip(1.2);
+        Plip p = new Plip(1.2);
         HashMap<Direction, Occupant> surrounded = new HashMap<Direction, Occupant>();
         surrounded.put(Direction.TOP, new Impassible());
         surrounded.put(Direction.BOTTOM, new Impassible());
@@ -54,7 +54,7 @@ public class TestPlip {
 
         //You can create new empties with new Empty();
         //Despite what the spec says, you cannot test for Cloruses nearby yet.
-        //Sorry!  
+        //Sorry!
 
         Action actual = p.chooseAction(surrounded);
         Action expected = new Action(Action.Type.STAY);
