@@ -64,7 +64,7 @@ public class TestPlip {
     }
 
     @Test
-    public void move_shouldHaveZeroEnergy_WhenTooLow() {
+    public void move_shouldHaveZeroEnergy_whenTooLow() {
         Plip p = new Plip(0.1);
         p.move();
         assertEquals(0.0, p.energy(), 0.01);
@@ -82,7 +82,7 @@ public class TestPlip {
     }
 
     @Test
-    public void stay_shouldHaveMaxEnergy_WhenTooHigh() {
+    public void stay_shouldHaveMaxEnergy_whenTooHigh() {
         Plip p = new Plip(2.0);
         p.stay();
         assertEquals(2.0, p.energy(), 0.01);
@@ -108,7 +108,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseAction_ShouldReturnStay_WhenSurrounded() {
+    public void chooseAction_ShouldReturnStay_whenSurrounded() {
         Plip p = new Plip(1.2);
         EnumMap<Direction, Occupant> surrounded = new EnumMap<>(Direction.class);
         surrounded.put(Direction.TOP, new Impassible());
@@ -120,7 +120,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseAction_shouldReturnReplicate_WithEnoughEnergyAndNotSurrounded() {
+    public void chooseAction_shouldReturnReplicate_withEnoughEnergyAndNotSurrounded() {
         Plip p = new Plip(1.2);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
         neighbours.put(Direction.TOP, new Impassible());
@@ -133,7 +133,7 @@ public class TestPlip {
 
     @Test
     @Ignore
-    public void chooseAction_shouldReturnMove_WithLessEnergyAndNotSurroundedAndClorus() {
+    public void chooseAction_shouldReturnMove_withLessEnergyAndNotSurroundedAndClorus() {
         // given
         Plip p = new Plip(0.1);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
@@ -151,7 +151,7 @@ public class TestPlip {
 
     @Test
     @Ignore
-    public void chooseAction_shouldReturnStay_WithLessEnergyAndNotSurroundedAndClorusAndHighRandom() {
+    public void chooseAction_shouldReturnStay_withLessEnergyAndNotSurroundedAndClorusAndHighRandom() {
         // given
         Plip p = new Plip(0.1);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
@@ -168,7 +168,7 @@ public class TestPlip {
     }
 
     @Test
-    public void chooseAction_shouldReturnStay_WithLessEnergyAndNotSurroundedAndNoClorus() {
+    public void chooseAction_shouldReturnStay_withLessEnergyAndNotSurroundedAndNoClorus() {
         Plip p = new Plip(0.7);
         EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
         neighbours.put(Direction.TOP, new Impassible());

@@ -129,9 +129,9 @@ public class SampleCreature extends Creature {
      */
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
 
-        return chooseOriginalSampleCreature(neighbors);
+//        return chooseOriginalSampleCreature(neighbors);
 
-//        return chooseReplicateOnWall(neighbors);
+        return chooseReplicateOnWall(neighbors);
 
 //        return chooseMoveAwayFromWall(neighbors);
     }
@@ -159,7 +159,9 @@ public class SampleCreature extends Creature {
             return new Action(Action.Type.MOVE, moveDir);
         }
 
-        // Die in corner (balances well the replication in 'small' worlds, n~15)
+        // Die in corner (balances well the replication in 'small' worlds:
+        // n~15, if solo
+        // n~much greater with plips, cos not enough space & die outweighs the replication)
         List<Direction> walls = getNeighborsOfType(neighbors, Occupant.Type.IMPASSABLE);
         if (walls.size() > 1) {
             return new Action(Action.Type.DIE);
