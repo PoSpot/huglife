@@ -162,6 +162,7 @@ public class SampleCreature extends Creature {
         // Die in corner (balances well the replication in 'small' worlds:
         // n~15, if solo
         // n~much greater with plips, cos not enough space & die outweighs the replication)
+        // n~15 with plips & cloruses - nice
         List<Direction> walls = getNeighborsOfType(neighbors, Occupant.Type.IMPASSABLE);
         if (walls.size() > 1) {
             return new Action(Action.Type.DIE);

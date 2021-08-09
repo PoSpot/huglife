@@ -1,13 +1,15 @@
 package creatures;
 
 import huglife.*;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.BDDMockito;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.awt.*;
 import java.util.EnumMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -17,7 +19,8 @@ import static org.junit.Assert.assertNotSame;
  *
  * @author Po
  */
-
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({HugLifeUtils.class })
 public class TestPlip {
 
     @Test
@@ -110,7 +113,7 @@ public class TestPlip {
     @Test
     public void chooseAction_ShouldReturnStay_whenSurrounded() {
         Plip p = new Plip(1.2);
-        EnumMap<Direction, Occupant> surrounded = new EnumMap<>(Direction.class);
+        Map<Direction, Occupant> surrounded = new EnumMap<>(Direction.class);
         surrounded.put(Direction.TOP, new Impassible());
         surrounded.put(Direction.BOTTOM, new Impassible());
         surrounded.put(Direction.LEFT, new Impassible());
@@ -122,60 +125,62 @@ public class TestPlip {
     @Test
     public void chooseAction_shouldReturnReplicate_withEnoughEnergyAndNotSurrounded() {
         Plip p = new Plip(1.2);
-        EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
-        neighbours.put(Direction.TOP, new Impassible());
-        neighbours.put(Direction.BOTTOM, new Impassible());
-        neighbours.put(Direction.LEFT, new Impassible());
-        neighbours.put(Direction.RIGHT, new Empty());
+        Map<Direction, Occupant> notSurrounded = new EnumMap<>(Direction.class);
+        notSurrounded.put(Direction.TOP, new Impassible());
+        notSurrounded.put(Direction.BOTTOM, new Impassible());
+        notSurrounded.put(Direction.LEFT, new Impassible());
+        notSurrounded.put(Direction.RIGHT, new Empty());
 
-        assertEquals(new Action(Action.Type.REPLICATE, Direction.RIGHT), p.chooseAction(neighbours));
+        assertEquals(new Action(Action.Type.REPLICATE, Direction.RIGHT), p.chooseAction(notSurrounded));
     }
 
     @Test
-    @Ignore
     public void chooseAction_shouldReturnMove_withLessEnergyAndNotSurroundedAndClorus() {
         // given
         Plip p = new Plip(0.1);
-        EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
-        neighbours.put(Direction.TOP, new Impassible());
-        neighbours.put(Direction.BOTTOM, new Impassible());
-//        neighbours.put(Direction.LEFT, new Clorus()); TODO when implemented..
-        neighbours.put(Direction.RIGHT, new Empty());
+        Map<Direction, Occupant> notSurroundedAndClorus = new EnumMap<>(Direction.class);
+        notSurroundedAndClorus.put(Direction.TOP, new Impassible());
+        notSurroundedAndClorus.put(Direction.BOTTOM, new Impassible());
+        notSurroundedAndClorus.put(Direction.LEFT, new Clorus());
+        notSurroundedAndClorus.put(Direction.RIGHT, new Empty());
 
-        Mockito.mockStatic(HugLifeUtils.class);
-        BDDMockito.given(HugLifeUtils.random()).willReturn(0.1); // maybe will work: https://stackoverflow.com/questions/21105403/mocking-static-methods-with-mockito
+        // mockito-core can't mock static methods
+        // mockito-inline can mock, but can't spy static methods
+        // => PowerMockito (with some warnings..)
+        PowerMockito.spy(HugLifeUtils.class);   // cos we need the other random methods
+        PowerMockito.when(HugLifeUtils.random()).thenReturn(0.1);
 
         // when/then
-        assertEquals(new Action(Action.Type.MOVE, Direction.RIGHT), p.chooseAction(neighbours));
+        assertEquals(new Action(Action.Type.MOVE, Direction.RIGHT), p.chooseAction(notSurroundedAndClorus));
     }
 
     @Test
-    @Ignore
     public void chooseAction_shouldReturnStay_withLessEnergyAndNotSurroundedAndClorusAndHighRandom() {
         // given
         Plip p = new Plip(0.1);
-        EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
-        neighbours.put(Direction.TOP, new Impassible());
-        neighbours.put(Direction.BOTTOM, new Impassible());
-//        neighbours.put(Direction.LEFT, new Clorus()); TODO when implemented..
-        neighbours.put(Direction.RIGHT, new Empty());
+        Map<Direction, Occupant> notSurroundedAndClorus = new EnumMap<>(Direction.class);
+        notSurroundedAndClorus.put(Direction.TOP, new Impassible());
+        notSurroundedAndClorus.put(Direction.BOTTOM, new Impassible());
+        notSurroundedAndClorus.put(Direction.LEFT, new Clorus());
+        notSurroundedAndClorus.put(Direction.RIGHT, new Empty());
 
-        Mockito.mockStatic(HugLifeUtils.class);
-        BDDMockito.given(HugLifeUtils.random()).willReturn(0.7); // maybe will work: https://stackoverflow.com/questions/21105403/mocking-static-methods-with-mockito
+        // see comment above
+        PowerMockito.spy(HugLifeUtils.class);
+        PowerMockito.when(HugLifeUtils.random()).thenReturn(0.7);
 
         // when/then
-        assertEquals(new Action(Action.Type.STAY), p.chooseAction(neighbours));
+        assertEquals(new Action(Action.Type.STAY), p.chooseAction(notSurroundedAndClorus));
     }
 
     @Test
     public void chooseAction_shouldReturnStay_withLessEnergyAndNotSurroundedAndNoClorus() {
         Plip p = new Plip(0.7);
-        EnumMap<Direction, Occupant> neighbours = new EnumMap<>(Direction.class);
-        neighbours.put(Direction.TOP, new Impassible());
-        neighbours.put(Direction.BOTTOM, new Impassible());
-        neighbours.put(Direction.LEFT, new Impassible());
-        neighbours.put(Direction.RIGHT, new Empty());
+        Map<Direction, Occupant> notSurroundedAndNoClorus = new EnumMap<>(Direction.class);
+        notSurroundedAndNoClorus.put(Direction.TOP, new Impassible());
+        notSurroundedAndNoClorus.put(Direction.BOTTOM, new Impassible());
+        notSurroundedAndNoClorus.put(Direction.LEFT, new Impassible());
+        notSurroundedAndNoClorus.put(Direction.RIGHT, new Empty());
 
-        assertEquals(new Action(Action.Type.STAY), p.chooseAction(neighbours));
+        assertEquals(new Action(Action.Type.STAY), p.chooseAction(notSurroundedAndNoClorus));
     }
 } 

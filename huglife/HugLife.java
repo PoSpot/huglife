@@ -1,5 +1,6 @@
 package huglife;
 
+import creatures.Clorus;
 import creatures.Plip;
 
 import java.util.logging.Logger;
@@ -74,8 +75,7 @@ public class HugLife {
             var x = in.readInt();
             var y = in.readInt();
             switch (creature) {
-                //Uncomment this when you're ready to test out your clorus class
-                // case "clorus" -> h.addCreature(x, y, new Clorus(1));
+                case "clorus" -> h.addCreature(x, y, new Clorus(1));
                 case "plip" -> h.addCreature(x, y, new Plip());
                 case "samplecreature" -> h.addCreature(x, y, new SampleCreature());
             }
@@ -151,12 +151,11 @@ public class HugLife {
                 addCreature(4, 3, new Plip());
             }
             case "strugggz" -> {
-                logger.info("You need to uncomment the strugggz test!");
-                /*addCreature(11, 1, new SampleCreature());
+                addCreature(11, 1, new SampleCreature());
                 addCreature(12, 12, new Plip());
                 addCreature(3, 3, new Plip());
                 addCreature(4, 3, new Plip());
-                addCreature(2, 2, new Clorus(1));*/
+                addCreature(2, 2, new Clorus(1));
             }
             default -> logger.severe("World name not recognized!");
         }

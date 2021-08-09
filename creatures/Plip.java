@@ -46,7 +46,6 @@ public class Plip extends Creature {
         this.energy = energy;
 
         g = (int)(GREEN_MIN + (GREEN_MAX - GREEN_MIN)/(ENERGY_MAX-ENERGY_MIN)*this.energy);
-        if (g < GREEN_MIN || g > GREEN_MAX) {throw new Error("Plip green is out of bound: " + g);}
     }
 
     @Override
